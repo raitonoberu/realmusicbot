@@ -1,0 +1,11 @@
+[Unit]
+Description=Real Music Bot
+
+[Service]
+ExecStart=%h/.local/bin/realmusicbot
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=default.target
