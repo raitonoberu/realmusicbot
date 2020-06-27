@@ -2,6 +2,9 @@
 LOGGING = False
 LOG_FILE = "realmusicbot.log"
 
+THREADED = False
+# (buggy, not recommended)
+
 # Get your token using tg @BotFather
 # https://t.me/botfather
 TOKEN = "<ENTER YOUR BOT TOKEN HERE>"

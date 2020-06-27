@@ -21,7 +21,7 @@ if RADIO_ON:
 if GENIUS_TOKEN:
     from .get_lyrics import get_lyrics
 
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot(TOKEN, threaded=False)
 
 
 def player():
