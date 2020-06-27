@@ -36,6 +36,7 @@ def player():
             continue
         track = whatisplaying()
         if track == {}:  # last track is over
+            announce = True
             queue = []
             sleep(refresh_rate)
             continue
@@ -45,6 +46,7 @@ def player():
                 symbol = choice(
                     ['🎹', '🎙', '🎸', '🥁', '🎻', '🎺'])
                 text = f"{symbol} Now playing:\n{queue[0]['title']} [{queue[0]['duration']}]"
+                logging.info(text)
                 keyboard = ("vol_down", "pause", "skip", "stop", "vol_up")
                 write_msg(text, queue[0]['id'], pic=queue[0]
                           ['cover'], keyboard=keyboard)
@@ -64,8 +66,6 @@ def player():
             else:  # nobody knows what is playing *_*
                 logging.error(
                     f"Unknown track\nqueue[0]: {queue[0]}\nplaying: {track['file']}")
-        else:
-            announce = True
         sleep(refresh_rate)
 
 
