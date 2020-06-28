@@ -13,37 +13,50 @@ This is a kind of addition to the awesome [Music Player Daemon](https://github.c
 
 ## Features
 
-- #### Search for music simply by sending a title...
+- ### Search for music simply by sending a title...
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/searching.png?raw=true" width="300"/>
 </details>
-- #### ...or link to a YouTube video
+
+- ### ...or link to a YouTube video
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/yt.png?raw=true" width="300"/>
 </details>
-- #### Use the search provided by @vid bot
+
+- ### Use the search provided by @vid bot
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/vid.png?raw=true" width="300"/>
 </details>
-- #### Fully working queue
+
+- ### Fully working queue
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/queue.png?raw=true" width="300"/>
 </details>
-- #### Turn on your favorite radio
+
+- ### Turn on your favorite radio
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/radio.png?raw=true" width="300"/>
 </details>
-- #### Search for song lyrics
+
+- ### Search for song lyrics
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/lyrics.png?raw=true" width="300"/>
 </details>
-- #### Protect the bot from unauthorized users
+
+- ### Protect the bot from unauthorized users
+
 <details>
     <summary>Screenshot</summary>
     <img src="screenshots/privatization.png?raw=true" width="300"/>
