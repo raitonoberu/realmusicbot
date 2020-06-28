@@ -341,7 +341,7 @@ def lyrics_msg(message):
     symbol = choice(['🚀', '⌛', '🔍', '🔎', '🎲'])
     bot.reply_to(message, f"Searching... {symbol}")
     try:
-        lyrics = get_lyrics(queue[0]['title'].split('(')[0])
+        lyrics = get_lyrics(queue[0]['title'].split('(')[0]].split('[')[0])
     except Exception as e:
         logging.error(e)
         lyrics = {}
@@ -426,6 +426,9 @@ def send_msg(text, id, pic=None, keyboard=None):
     if pic:
         text += f"\n\n{pic}"
     try:
+        if len(text) > 4000:
+            send_msg(text[:4000], id)
+            text = text[4000:]
         bot.send_message(id, text, reply_markup=keyboard)
     except Exception as e:
         logging.info(e)
