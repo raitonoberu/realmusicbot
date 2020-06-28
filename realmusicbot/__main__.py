@@ -1,12 +1,20 @@
+from .settings import *
 import telebot
+telebot.apihelper.READ_TIMEOUT = TIMEOUT
 import mpd
-from .get import get
+
 from time import sleep
 from random import choice
 from threading import Thread
-import logging
 
-from .settings import *
+from .get import get
+from .keyboards import keyboards
+if RADIO_ON:
+    from .get_radio import get_radio
+if GENIUS_TOKEN:
+    from .get_lyrics import get_lyrics
+
+import logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] (%(funcName)s) %(message)s",
@@ -15,11 +23,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ] if LOGGING else [logging.StreamHandler()]
 )
-from .keyboards import keyboards
-if RADIO_ON:
-    from .get_radio import get_radio
-if GENIUS_TOKEN:
-    from .get_lyrics import get_lyrics
+
 
 bot = telebot.TeleBot(TOKEN, threaded=THREADED)
 
@@ -29,44 +33,45 @@ def player():
     announce = True
     refresh_rate = 0.5
     while True:
+        sleep(refresh_rate)
         global queue
         if queue == []:  # nothing is playing
             announce = True
-            sleep(refresh_rate)
             continue
         track = whatisplaying()
         if track == {}:  # last track is over
             announce = True
             queue = []
-            sleep(refresh_rate)
             continue
-        if track.get("file") == queue[0]['file']:
-            s = status()
-            if announce:
-                symbol = choice(
-                    ['🎹', '🎙', '🎸', '🥁', '🎻', '🎺'])
-                text = f"{symbol} Now playing:\n{queue[0]['title']} [{queue[0]['duration']}]"
-                logging.info(text)
-                keyboard = ("vol_down", "pause", "skip", "stop", "vol_up")
-                write_msg(text, queue[0]['id'], pic=queue[0]
-                          ['cover'], keyboard=keyboard)
-                announce = False
-            if s.get('error'):
-                write_msg(
-                    f"Error! ⚠\n{s['error']}", queue[0]['id'])
-                play()
-                skip()
-                queue.pop(0)
+        try:
+            if track.get("file") == queue[0]['file']:
+                s = status()
+                if announce:
+                    symbol = choice(
+                        ['🎹', '🎙', '🎸', '🥁', '🎻', '🎺'])
+                    text = f"{symbol} Now playing:\n{queue[0]['title']} [{queue[0]['duration']}]"
+                    logging.info(text.replace("\n", " "))
+                    keyboard = ("vol_down", "pause", "skip", "stop", "vol_up")
+                    send_msg(text, queue[0]['id'], pic=queue[0]
+                              ['cover'], keyboard=keyboard)
+                    announce = False
+                if s.get('error'):
+                    send_msg(
+                        f"Error! ⚠\n{s['error']}", queue[0]['id'])
+                    play()
+                    skip()
+                    queue.pop(0)
+                    announce = True
+            elif len(queue) > 1:
                 announce = True
-        elif len(queue) > 1:
-            announce = True
-            # next track is playing
-            if track['file'].strip() == queue[1]['file'].strip():
-                queue.pop(0)
-            else:  # nobody knows what is playing *_*
-                logging.error(
-                    f"Unknown track\nqueue[0]: {queue[0]}\nplaying: {track['file']}")
-        sleep(refresh_rate)
+                # next track is playing
+                if track['file'].strip() == queue[1]['file'].strip():
+                    queue.pop(0)
+                else:  # nobody knows what is playing *_*
+                    logging.error(
+                        f"Unknown track\nqueue[0]: {queue[0]}\nplaying: {track['file']}")
+        except:
+            logging.exception('')
 
 
 def add(dictionary, id, announce=True):
@@ -76,7 +81,7 @@ def add(dictionary, id, announce=True):
         if whatisplaying() == {} or whatisplaying().get('file') == dictionary['file']:
             play()
         elif announce:
-            write_msg(
+            send_msg(
                 f"⭐ Added to queue: \n{dictionary['title']} [{dictionary['duration']}]", id, keyboard=("skip",))
         dictionary['id'] = id
         queue.append(dictionary)
@@ -128,7 +133,7 @@ def play():
 def skip():
     try:
         client.next()
-    except mpd.base.CommandError:
+    except mpd.base.CommandError:  # nothing is playing
         pass
     except Exception as e:
         logging.info(e)
@@ -203,6 +208,10 @@ def unauthorized_msg(message):
     bot.reply_to(
         message, f"⚠ You are not allowed to use this bot ⚠\nYour ID: {message.from_user.id}")
 
+@bot.message_handler(commands=['start'])
+def start_msg(message):
+    bot.reply_to(message, START_MESSAGE)
+
 
 @bot.message_handler(commands=volume_prefixes)
 def volume_msg(message):
@@ -215,7 +224,7 @@ def volume_msg(message):
             symbol = '🔇'
         else:
             symbol = '🔊'
-        write_msg(f"{symbol} {volume}%", id, keyboard=("vol_down", "vol_up"))
+        send_msg(f"{symbol} {volume}%", id, keyboard=("vol_down", "vol_up"))
         return
     if volume.startswith('-') or volume.startswith('+'):
         if volume.startswith('+'):
@@ -229,7 +238,7 @@ def volume_msg(message):
             symbol = '🔇'
         else:
             symbol = '🔊'
-        write_msg(f"{symbol} {volume}%", id, keyboard=("vol_down", "vol_up"))
+        send_msg(f"{symbol} {volume}%", id, keyboard=("vol_down", "vol_up"))
         return
     try:
         volume = int(volume)
@@ -241,7 +250,7 @@ def volume_msg(message):
         else:
             symbol = '🔊'
         set_volume(volume)
-        write_msg(f"{symbol} {volume}%", id, keyboard=("vol_down", "vol_up"))
+        send_msg(f"{symbol} {volume}%", id, keyboard=("vol_down", "vol_up"))
 
 
 @bot.message_handler(commands=skip_commands)
@@ -249,10 +258,10 @@ def skip_msg(message):
     id = message.chat.id
     state = status()['state']
     if state == "stop":
-        write_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing is playing! 💤", id)
     else:
         skip()
-        write_msg("👌", id)
+        send_msg("👌", id)
 
 
 @bot.message_handler(commands=stop_commands)
@@ -260,10 +269,10 @@ def stop_msg(message):
     id = message.chat.id
     state = status()['state']
     if state == "stop":
-        write_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing is playing! 💤", id)
     else:
         stop()
-        write_msg("⏹", id)
+        send_msg("⏹", id)
 
 
 @bot.message_handler(commands=pause_commands)
@@ -271,11 +280,11 @@ def pause_msg(message):
     id = message.chat.id
     state = status()['state']
     if state == "play":
-        write_msg("⏸", id)
+        send_msg("⏸", id)
     elif state == "pause":
-        write_msg("▶", id)
+        send_msg("▶", id)
     else:
-        write_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing is playing! 💤", id)
     pause()
 
 
@@ -283,7 +292,7 @@ def pause_msg(message):
 def queue_msg(message):
     id = message.chat.id
     if queue == []:
-        write_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing is playing! 💤", id)
         return
     s = status()
     if s['state'] == "pause":
@@ -296,7 +305,7 @@ def queue_msg(message):
     answer.extend([
         f"{i + 1}. {queue[i]['title']} [{queue[i]['duration']}]" for i in range(1, len(queue))])
     answer = "\n".join(answer)
-    write_msg(answer, id, keyboard=("skip", "stop"))
+    send_msg(answer, id, keyboard=("skip", "stop"))
 
 
 @bot.message_handler(commands=radio_prefixes)
@@ -316,7 +325,7 @@ def radio_msg(message):
     if stantion != {}:
         add(stantion, id)
     else:
-        write_msg("Not found ⚠", id)
+        send_msg("Not found ⚠", id)
 
 
 @bot.message_handler(commands=lyrics_commands)
@@ -325,7 +334,7 @@ def lyrics_msg(message):
         return
     id = message.chat.id
     if len(queue) == 0:
-        write_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing is playing! 💤", id)
         return
     if queue[0]['duration'] == "radio":
         return
@@ -338,16 +347,16 @@ def lyrics_msg(message):
         lyrics = {}
     if lyrics != {}:
         answer = f"📄 Lyrics for {lyrics['title']}:\n{lyrics['lyrics']}"
-        write_msg(answer, id, pic=lyrics['art'])
+        send_msg(answer, id, pic=lyrics['art'])
     else:
-        write_msg("Not found ⚠", id)
+        send_msg("Not found ⚠", id)
 
 
 @bot.message_handler(func=lambda message: message.text)
 def play_msg(message):
     id = message.chat.id
     if message.text.startswith('/'):
-        write_msg("Unknown command ⚠", id)
+        send_msg("Unknown command ⚠", id)
         return
     track_title = message.text
     symbol = choice(['🚀', '⌛', '🔍', '🔎', '🎲'])
@@ -361,7 +370,7 @@ def play_msg(message):
         link['duration'] = duration(link['duration'])
         add(link, id)
     else:
-        write_msg("Not found ⚠", id)
+        send_msg("Not found ⚠", id)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -406,7 +415,7 @@ def connect():
             connect()
 
 
-def write_msg(text, id, pic=None, keyboard=None):
+def send_msg(text, id, pic=None, keyboard=None):
     global KEYBOARD
     if KEYBOARD and keyboard is None:
         keyboard = keyboards.main()  # show global keyboard
@@ -416,7 +425,12 @@ def write_msg(text, id, pic=None, keyboard=None):
 
     if pic:
         text += f"\n\n{pic}"
-    bot.send_message(id, text, reply_markup=keyboard)
+    try:
+        bot.send_message(id, text, reply_markup=keyboard)
+    except Exception as e:
+        logging.info(e)
+        sleep(1)
+        send_msg(text, id, keyboard=keyboard)
 
 
 def main():

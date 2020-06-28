@@ -47,5 +47,14 @@ setup(
         'pyTelegramBotAPI>=3.7.1',
         'pafy @ git+https://github.com/mps-youtube/pafy',
     ],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: No Input/Output (Daemon)',
+        'License :: OSI Approved :: Apache Software License'
+        'Programming Language :: Python :: 3.7',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: POSIX :: Linux',
+    ],
+    python_requires='>=3.7',
     cmdclass={'install': InstallService}
 )

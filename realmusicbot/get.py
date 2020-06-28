@@ -1,11 +1,6 @@
 import pafy
 from youtube_search import YoutubeSearch
 
-######################################################
-#     You can also customize the way bot get songs   #
-#             by changing get() function.            #
-######################################################
-
 
 def get_url(name_or_url):
     if "youtu" in name_or_url:  # detect youtube link
@@ -27,5 +22,7 @@ def get(name_or_url):
         return {}
     video = pafy.new(url)
     cover = video.getbestthumb()
-    return {"title": video.title, "duration": video.length,
-            "file": video.getbestaudio().url, "cover": url}
+    return {"title": video.title,
+            "duration": video.length,
+            "file": video.getbestaudio().url,
+            "cover": url}
