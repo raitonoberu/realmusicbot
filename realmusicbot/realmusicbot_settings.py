@@ -48,6 +48,8 @@ List of available commands:
 /{queue_commands[0]} - Shows current queue
 /{pause_commands[0]} - Pauses playback
 /{volume_prefixes[0]} - Shows current volume
+/{volume_prefixes[0]} +10 - Changes current volume
+/{volume_prefixes[0]} 50 - Sets volume
 /{radio_prefixes[0]} - Searches for radio
 /{lyrics_commands[0]} - Searches for lyrics
 

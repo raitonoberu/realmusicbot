@@ -49,6 +49,19 @@ This is a kind of addition to the awesome [Music Player Daemon](https://github.c
     <img src="screenshots/privatization.png?raw=true" width="300"/>
 </details>
 
+List of available commands:
+
+- **/s** - Skips the currently playing song
+- **/stop** - Stops playback and clears the queue
+- **/q** - Shows current queue
+- **/p** - Pauses playback
+- **/v** - Shows current volume
+- **/v +10** - Changes current volume
+- **/v 50** - Sets volume
+- **/r** <station> - Searches for radio
+- **/l** - Searches for lyrics
+
+
 ## Installation (Raspberry Pi / Linux)
 
 Make sure you have [Python 3.7+ installed](https://www.python.org/downloads/)

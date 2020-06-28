@@ -210,7 +210,7 @@ def unauthorized_msg(message):
 
 @bot.message_handler(commands=['start'])
 def start_msg(message):
-    bot.reply_to(message, START_MESSAGE)
+    send_msg(START_MESSAGE, message.chat.id)
 
 
 @bot.message_handler(commands=volume_prefixes)
