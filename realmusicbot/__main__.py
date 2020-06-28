@@ -341,7 +341,7 @@ def lyrics_msg(message):
     symbol = choice(['🚀', '⌛', '🔍', '🔎', '🎲'])
     bot.reply_to(message, f"Searching... {symbol}")
     try:
-        lyrics = get_lyrics(queue[0]['title'].split('(')[0]].split('[')[0])
+        lyrics = get_lyrics(queue[0]['title'].split('(')[0].split('[')[0])
     except Exception as e:
         logging.error(e)
         lyrics = {}
