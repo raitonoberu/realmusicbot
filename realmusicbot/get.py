@@ -16,13 +16,31 @@ def get_url(name_or_url):
         return ""
 
 
+def get_playlist(url):
+    playlist = pafy.get_playlist(url)
+    for video in playlist['items']:
+        video = video['pafy']
+        try:
+            video = {
+                "title": video.title,
+                "duration": video.length,
+                "file": video.getbestaudio().url,
+                "cover": video.watchv_url}
+            yield video
+        except Exception as e:
+            print(e)
+            pass
+
+
 def get(name_or_url):
     url = get_url(name_or_url)
     if url == "":
-        return {}
+        yield {}
+    if "playlist" in url:
+        yield from get_playlist(url)
+        return
     video = pafy.new(url)
-    cover = video.getbestthumb()
-    return {"title": video.title,
-            "duration": video.length,
-            "file": video.getbestaudio().url,
-            "cover": url}
+    yield {"title": video.title,
+           "duration": video.length,
+           "file": video.getbestaudio().url,
+           "cover": video.watchv_url}

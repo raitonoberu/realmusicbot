@@ -1,20 +1,20 @@
+import logging
+from .keyboards import keyboards
+from .get import get
+from threading import Thread
+from random import choice
+from time import sleep
+import mpd
 from .settings import *
 import telebot
 telebot.apihelper.READ_TIMEOUT = TIMEOUT
-import mpd
 
-from time import sleep
-from random import choice
-from threading import Thread
 
-from .get import get
-from .keyboards import keyboards
 if RADIO_ON:
     from .get_radio import get_radio
 if GENIUS_TOKEN:
     from .get_lyrics import get_lyrics
 
-import logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] (%(funcName)s) %(message)s",
@@ -53,7 +53,7 @@ def player():
                     logging.info(text.replace("\n", " "))
                     keyboard = ("vol_down", "pause", "skip", "stop", "vol_up")
                     send_msg(text, queue[0]['id'], pic=queue[0]
-                              ['cover'], keyboard=keyboard)
+                             ['cover'], keyboard=keyboard)
                     announce = False
                 if s.get('error'):
                     send_msg(
@@ -208,6 +208,7 @@ def unauthorized_msg(message):
     bot.reply_to(
         message, f"⚠ You are not allowed to use this bot ⚠\nYour ID: {message.from_user.id}")
 
+
 @bot.message_handler(commands=['start'])
 def start_msg(message):
     send_msg(START_MESSAGE, message.chat.id)
@@ -325,7 +326,7 @@ def radio_msg(message):
     if stantion != {}:
         add(stantion, id)
     else:
-        send_msg("Not found ⚠", id)
+        bot.reply_to(message, "Not found ⚠")
 
 
 @bot.message_handler(commands=lyrics_commands)
@@ -349,7 +350,7 @@ def lyrics_msg(message):
         answer = f"📄 Lyrics for {lyrics['title']}:\n{lyrics['lyrics']}"
         send_msg(answer, id, pic=lyrics['art'])
     else:
-        send_msg("Not found ⚠", id)
+        bot.reply_to(message, "Not found ⚠")
 
 
 @bot.message_handler(func=lambda message: message.text)
@@ -362,15 +363,16 @@ def play_msg(message):
     symbol = choice(['🚀', '⌛', '🔍', '🔎', '🎲'])
     bot.reply_to(message, f"Searching... {symbol}")
     try:
-        link = get(track_title)
+        tracks = get(track_title)
+        for track in tracks:
+            if track == {}:
+                bot.reply_to(message, "Not found ⚠")
+                continue
+            track['duration'] = duration(track['duration'])
+            add(track, id)
     except Exception as e:
         logging.error(e)
-        link = {}
-    if link != {}:
-        link['duration'] = duration(link['duration'])
-        add(link, id)
-    else:
-        send_msg("Not found ⚠", id)
+        bot.reply_to(message, "Not found ⚠")
 
 
 @bot.callback_query_handler(func=lambda call: True)

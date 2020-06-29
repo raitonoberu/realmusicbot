@@ -27,7 +27,7 @@ class InstallService(install):
 
 setup(
     name='realmusicbot',
-    version='1.0',
+    version='1.1',
     author='raitonoberu',
     description='Control your Music Player Daemon with Telegram and play music from YouTube',
     author_email='disith@mail.ru',
@@ -51,8 +51,7 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: No Input/Output (Daemon)',
         'License :: OSI Approved :: Apache Software License'
-        'Programming Language :: Python :: 3.7',
-        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
         'Operating System :: POSIX :: Linux',
     ],
     python_requires='>=3.7',
