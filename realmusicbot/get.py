@@ -36,6 +36,7 @@ def get(name_or_url):
     url = get_url(name_or_url)
     if url == "":
         yield {}
+        return
     if "playlist" in url:
         yield from get_playlist(url)
         return
