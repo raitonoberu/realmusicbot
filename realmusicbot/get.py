@@ -1,17 +1,14 @@
 import pafy
-from youtube_search import YoutubeSearch
+from youtubesearchpython import searchYoutube
+#  A BIG THANKS to https://github.com/alexmercerind
 
 
 def get_url(name_or_url):
     if "youtu" in name_or_url:  # detect youtube link
         return name_or_url
-    results = YoutubeSearch(name_or_url, max_results=1).to_dict()
-    for i in range(2):  # try 2 times to avoid network issues
-        if results != []:
-            break
-        results = YoutubeSearch(name_or_url, max_results=1).to_dict()
-    if results != []:
-        return f"https://www.youtube.com{results[0]['link']}"
+    result = searchYoutube(name_or_url, mode="list").result()
+    if result:
+        return result[0][2]
     else:
         return ""
 

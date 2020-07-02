@@ -40,7 +40,7 @@ setup(
     },
     install_requires=[
         'lyricsgenius>=1.8.6',
-        'youtube_search>=0.1.3',
+        'youtube-search-python>=1.0.0',
         'youtube_dl>=2020.6.6',
         'pyradios>=0.0.21',
         'python_mpd2>=1.0.0',
