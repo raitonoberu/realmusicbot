@@ -27,7 +27,7 @@ class InstallService(install):
 
 setup(
     name='realmusicbot',
-    version='1.1',
+    version='1.2',
     author='raitonoberu',
     description='Control your Music Player Daemon with Telegram and play music from YouTube',
     author_email='disith@mail.ru',
