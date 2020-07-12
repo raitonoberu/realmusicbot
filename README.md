@@ -161,4 +161,4 @@ John W. Miller (johnwmillr) for [LyricsGenius](https://github.com/johnwmillr/Lyr
 
 "mps-youtube" organization for [Pafy](https://github.com/mps-youtube/pafy)
 
-joe tats (joetats) for [youtube_search](https://github.com/joetats/youtube_search)
+Hitesh Kumar Saini (alexmercerind) for [youtube-search-python](https://github.com/alexmercerind/youtube-search-python)
