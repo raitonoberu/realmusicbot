@@ -64,8 +64,8 @@ def player():
                     announce = True
             elif len(queue) > 1:
                 announce = True
-                # next track is playing
-                if track['file'].strip() == queue[1]['file'].strip():
+                # something in the queue is playing (not the 1st)
+                if track['file'].strip() in [i['file'].strip() for i in queue[1:]]:
                     queue.pop(0)
                 else:  # nobody knows what is playing *_*
                     logging.error(
