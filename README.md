@@ -82,8 +82,7 @@ Make sure you have [Python 3.7+ installed](https://www.python.org/downloads/)
 ### 1. Install packages
 
     $ sudo apt install mpd
-    $ git clone https://github.com/raitonoberu/realmusicbot
-    $ pip3 install ./realmusicbot
+    $ pip3 install https://github.com/raitonoberu/realmusicbot/archive/master.zip
 
 
 ### 2. Change settings
