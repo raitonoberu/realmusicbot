@@ -35,7 +35,7 @@ def player():
     while True:
         sleep(refresh_rate)
         global queue
-        if queue == []:  # nothing is playing
+        if queue == []:  # nothing playing
             announce = True
             continue
         track = whatisplaying()
@@ -64,7 +64,7 @@ def player():
                     announce = True
             elif len(queue) > 1:
                 announce = True
-                # something in the queue is playing (not the 1st)
+                # playing something from the queue (not the 1st one)
                 if track['file'].strip() in [i['file'].strip() for i in queue[1:]]:
                     queue.pop(0)
                 else:  # nobody knows what is playing *_*
@@ -133,7 +133,7 @@ def play():
 def skip():
     try:
         client.next()
-    except mpd.base.CommandError:  # nothing is playing
+    except mpd.base.CommandError:  # nothing playing
         pass
     except Exception as e:
         logging.info(e)
@@ -259,7 +259,7 @@ def skip_msg(message):
     id = message.chat.id
     state = status()['state']
     if state == "stop":
-        send_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing playing! 💤", id)
     else:
         skip()
         send_msg("👌", id)
@@ -270,7 +270,7 @@ def stop_msg(message):
     id = message.chat.id
     state = status()['state']
     if state == "stop":
-        send_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing playing! 💤", id)
     else:
         stop()
         send_msg("⏹", id)
@@ -285,7 +285,7 @@ def pause_msg(message):
     elif state == "pause":
         send_msg("▶", id)
     else:
-        send_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing playing! 💤", id)
     pause()
 
 
@@ -293,7 +293,7 @@ def pause_msg(message):
 def queue_msg(message):
     id = message.chat.id
     if queue == []:
-        send_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing playing! 💤", id)
         return
     s = status()
     if s['state'] == "pause":
@@ -335,7 +335,7 @@ def lyrics_msg(message):
         return
     id = message.chat.id
     if len(queue) == 0:
-        send_msg("Nothing is playing! 💤", id)
+        send_msg("Nothing playing! 💤", id)
         return
     if queue[0]['duration'] == "radio":
         return
