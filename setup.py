@@ -38,10 +38,10 @@ setup(
             'realmusicbot = realmusicbot.__main__:main'
         ]
     },
+    setup_requires=['youtube_dl>=2020.6.6'],
     install_requires=[
         'lyricsgenius>=1.8.6',
         'youtube-search-python>=1.0.0',
-        'youtube_dl>=2020.6.6',
         'pyradios>=0.0.21',
         'python_mpd2>=1.0.0',
         'pyTelegramBotAPI>=3.7.1',
