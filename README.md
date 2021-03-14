@@ -1,15 +1,15 @@
-<h1 align="center">🎶 Real Music Bot (beta) 🎶</h1>
+<h1 align="center">🎶 Real Music Bot 2.0 🎶</h1>
 
 <p align="center">
     Control your speakers with Telegram and play music from YouTube
-</p>
 
 <img src="screenshots/searching2.png?raw=true" width="200" />
+</p>
 
 ## What is it?
 
 If you've ever used Discord, you've probably heard of music bots that play music for you. All you had to do was just type "**-p \<track_name\>**" to listen to your favorite song. I also liked it, so I made the real one!<br>
-This is a kind of addition to the awesome [Music Player Daemon](https://github.com/MusicPlayerDaemon/MPD). This script runs as a service on Raspberry Pi and allows you to play music from YouTube and control playback using Telegram.
+This script runs as a service and allows you to play music from YouTube and control playback using Telegram. It uses an awesome [MPV](https://github.com/mpv-player/mpv) media player as a backend.
 
 ## Features
 
@@ -64,15 +64,15 @@ This is a kind of addition to the awesome [Music Player Daemon](https://github.c
 
 List of available commands:
 
-- **/s** - Skips the currently playing song
-- **/stop** - Stops playback and clears the queue
-- **/q** - Shows current queue
-- **/p** - Pauses playback
-- **/v** - Shows current volume
-- **/v +10** - Changes current volume
-- **/v 50** - Sets volume
-- **/r** <station> - Searches for radio
-- **/l** - Searches for lyrics
+- **/s** - Skip the currently playing song
+- **/stop** - Stop playback and clear the queue
+- **/q** - Show current queue
+- **/p** - Pause playback
+- **/v** - Show current volume
+- **/v +10** - Change current volume
+- **/v 50** - Set volume
+- **/r** <station> - Search for radio
+- **/l** - Search for lyrics
 
 
 ## Installation (Raspberry Pi / Linux)
@@ -81,47 +81,48 @@ Make sure you have [Python 3.7+ installed](https://www.python.org/downloads/)
 
 ### 1. Install packages
 
-    $ sudo apt install mpd
+    $ sudo apt install mpv
     $ pip3 install https://github.com/raitonoberu/realmusicbot/archive/master.zip
 
 
 ### 2. Change settings
 
-Before running, you must configure your bot by editing the file **~/realmusicbot_settings.py**:
+Before running, you must configure your bot by editing the file **~/.config/realmusicbot.ini**:
 
-    $ nano ~/realmusicbot_settings.py
+    $ nano ~/.config/realmusicbot.ini
 
 #### 2.1 Set your bot token
 
 [How do I create a bot?](https://core.telegram.org/bots#6-botfather)
 
-    TOKEN = "<ENTER YOUR BOT TOKEN HERE>"
+    TOKEN=yourtoken
 
-#### 2.2 Enable additional features (optional)
+#### 2.2 Configure additional features (optional)
 
-    # 1. Enable global keyboard
-    KEYBOARD = True
+    # Whether to process messages simultaneously
+    THREADED=true
 
-    # 2. Allows you to search radio (/radio <station>)
-    RADIO_ON = True
+    # Select YouTube ITAG code
+    # - 251 is the highest quality
+    # - More here: https://gist.github.com/sidneys/7095afe4da4ae58694d128b1034e01e2
+    ITAG=251
 
-    # 3. Allows you to search lyrics (/lyrics)
-    # - Get your Genius API Token here:
+    # Allows you to search radio (/radio <station>)
+    RADIO=true
+
+    # Allows you to search lyrics (/lyrics)
+    # - Get your Genius Client Access Token here:
     # - https://genius.com/api-clients
-    GENIUS_TOKEN = ""
+    GENIUS_TOKEN=
 
-    # 4. Bot privatization (HIGHLY RECOMMENDED)
+    # Bot privatization (HIGHLY RECOMMENDED)
     # - Get your User ID using tg @userinfobot and add it to the list
     # - https://t.me/userinfobot
     # - If you leave it empty, everyone can use the bot
-    ALLOWED_IDS = []  # example: [123456789, 987641234]
+    # - example: 123456789,987641234
+    ALLOWED_IDS=
 
 ### 3. Run your bot
-
-Start MPD first:
-
-    $ sudo systemctl start mpd
-    $ sudo systemctl enable mpd
 
 There are two ways to run Real Music Bot. It's recommended to run it in a terminal first to make sure that it works.
 
@@ -145,12 +146,12 @@ Check logs:
     $ systemctl --user stop realmusicbot
     $ systemctl --user disable realmusicbot
     $ sudo rm ~/.config/systemd/user/realmusicbot.service
-    $ sudo rm -r ~/realmusicbot*
+    $ sudo rm -r ~/.config/realmusicbot.ini
     $ pip3 uninstall realmusicbot
 
 ## Credits
 
-Max Kellermann (MaxKellermann) for [Music Player Daemon](https://github.com/MusicPlayerDaemon/MPD)
+"mpv-player" organization for [mpv](https://github.com/mpv-player/mpv)
 
 FrankWang (eternnoir) for [pyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI)
 
@@ -158,6 +159,19 @@ André P. Santos (andreztz) for [pyradios](https://github.com/andreztz/pyradios)
 
 John W. Miller (johnwmillr) for [LyricsGenius](https://github.com/johnwmillr/LyricsGenius)
 
-"mps-youtube" organization for [Pafy](https://github.com/mps-youtube/pafy)
+"pytube" organization for [Pafy](https://github.com/pytube/pytube)
 
 Hitesh Kumar Saini (alexmercerind) for [youtube-search-python](https://github.com/alexmercerind/youtube-search-python)
+
+jaseg for [python-mpv](https://github.com/jaseg/python-mpv)
+
+## License
+
+GPLv3, see [LICENSE](./LICENSE) for additional info.
+
+## TODO
+
+* Localization
+* Better exceptions handling & logging
+* Passing params to MPV
+* Running the bot in Windows

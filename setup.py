@@ -1,3 +1,7 @@
+"""
+RealMusicBot: Control your speakers with Telegram and play music from YouTube
+Copyright (C) 2021  raitonoberu
+"""
 from setuptools.command.install import install
 from setuptools import setup, find_packages
 import subprocess
@@ -11,49 +15,41 @@ class InstallService(install):
         install.run(self)
         current_dir_path = os.path.dirname(os.path.realpath(__file__))
         create_service_script_path = os.path.join(
-            current_dir_path, 'realmusicbot', 'install_scripts', 'create_service.sh')
+            current_dir_path, "realmusicbot", "install_scripts", "create_service.sh"
+        )
         st = os.stat(create_service_script_path)
         os.chmod(create_service_script_path, st.st_mode | stat.S_IEXEC)
         subprocess.check_output([create_service_script_path])
-        new_settings = current_dir_path + "/realmusicbot/realmusicbot_settings.py"
-        settings = os.getenv("HOME") + "/realmusicbot_settings.py"
-        if not(os.path.isfile(settings)):
-            # create new settings
+        new_settings = current_dir_path + "/realmusicbot/settings.ini"
+        settings = os.getenv("HOME") + "/.config/realmusicbot.ini"
+        if not (os.path.exists(settings)):
             shutil.copy2(new_settings, settings)
-        else:
-            # do not touch settings
-            shutil.copy2(new_settings, settings + ".new")
 
 
 setup(
-    name='realmusicbot',
-    version='1.2',
-    author='raitonoberu',
-    description='Control your Music Player Daemon with Telegram and play music from YouTube',
-    author_email='disith@mail.ru',
-    url='https://github.com/raitonoberu/realmusicbot',
+    name="realmusicbot",
+    version="2.0",
+    author="raitonoberu",
+    description="Play music from YouTube and control playback with Telegram",
+    author_email="raitonoberu@mail.ru",
+    url="https://github.com/raitonoberu/realmusicbot",
     packages=find_packages(),
-    entry_points={
-        'console_scripts': [
-            'realmusicbot = realmusicbot.__main__:main'
-        ]
-    },
-    setup_requires=['youtube_dl>=2020.6.6'],
+    entry_points={"console_scripts": ["realmusicbot = realmusicbot:run"]},
     install_requires=[
-        'lyricsgenius>=1.8.6',
-        'youtube-search-python>=1.0.0',
-        'pyradios>=0.0.21',
-        'python_mpd2>=1.0.0',
-        'pyTelegramBotAPI>=3.7.1',
-        'pafy @ git+https://github.com/mps-youtube/pafy',
+        "python-mpv",
+        "lyricsgenius",
+        "youtube-search-python",
+        "pyradios",
+        "pyTelegramBotAPI",
+        "pytube",
     ],
     classifiers=[
-        'Development Status :: 4 - Beta',
-        'Environment :: No Input/Output (Daemon)',
-        'License :: OSI Approved :: Apache Software License'
-        'Programming Language :: Python :: 3',
-        'Operating System :: POSIX :: Linux',
+        "Development Status :: 4 - Beta",
+        "Environment :: No Input/Output (Daemon)",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+        "Programming Language :: Python :: 3",
+        "Operating System :: POSIX :: Linux",
     ],
-    python_requires='>=3.7',
-    cmdclass={'install': InstallService}
+    python_requires=">=3.7",
+    cmdclass={"install": InstallService},
 )
