@@ -6,6 +6,7 @@ from .settings import itag
 from .utils import convert_duration
 from youtubesearchpython import VideosSearch, StreamURLFetcher, Video, Playlist
 
+fetcher = StreamURLFetcher()
 
 def _get_playlist(url):
     playlist = Playlist.getVideos(url)
@@ -13,7 +14,6 @@ def _get_playlist(url):
         url = video["link"]
         try:
             duration = video["duration"]
-            fetcher = StreamURLFetcher()
             video = Video.get(url)
             stream = fetcher.get(video, itag)
             yield (video["title"], duration, stream, url)
