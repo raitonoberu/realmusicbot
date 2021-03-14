@@ -2,8 +2,10 @@
 
 <p align="center">
     Control your speakers with Telegram and play music from YouTube
+</p>
 
-<img src="screenshots/searching2.png?raw=true" width="200" />
+<p align="center">
+    <img src="screenshots/searching2.png?raw=true" width="200" />
 </p>
 
 ## What is it?
@@ -172,6 +174,7 @@ GPLv3, see [LICENSE](./LICENSE) for additional info.
 ## TODO
 
 * Localization
+* "jump", "delete", "seek" commands
 * Better exceptions handling & logging
 * Passing params to MPV
 * Running the bot in Windows
