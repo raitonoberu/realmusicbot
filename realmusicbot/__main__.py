@@ -49,8 +49,6 @@ player = mpv.MPV(vid=False, ytdl=False, log_handler=mpv_log)
 def send_msg(text, id, pic=None, keyboard=None):
     if isinstance(keyboard, tuple):  # custom inline keyboard
         keyboard = keyboards.create(keyboard)
-    else:
-        keyboard = keyboards.main()
 
     if pic:
         text += f"\n\n{pic}"
@@ -176,7 +174,7 @@ def unauthorized_msg(message):
 
 @bot.message_handler(commands=["start"])
 def start_msg(message):
-    send_msg(commands.start_message, message.chat.id)
+    send_msg(commands.start_message, message.chat.id, keyboard=keyboards.main())
 
 
 @bot.message_handler(commands=commands.volume_prefixes)
