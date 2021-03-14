@@ -161,7 +161,7 @@ André P. Santos (andreztz) for [pyradios](https://github.com/andreztz/pyradios)
 
 John W. Miller (johnwmillr) for [LyricsGenius](https://github.com/johnwmillr/LyricsGenius)
 
-"pytube" organization for [Pafy](https://github.com/pytube/pytube)
+"pytube" organization for [pytube](https://github.com/pytube/pytube)
 
 Hitesh Kumar Saini (alexmercerind) for [youtube-search-python](https://github.com/alexmercerind/youtube-search-python)
 
