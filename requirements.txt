@@ -1,0 +1,6 @@
+python-mpv
+lyricsgenius
+youtube-search-python
+pyradios
+pyTelegramBotAPI
+pytube==10.5.1
