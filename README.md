@@ -10,8 +10,10 @@
 
 ## What is it?
 
-If you've ever used Discord, you've probably heard of music bots that play music for you. All you had to do was just type "**-p \<track_name\>**" to listen to your favorite song. I also liked it, so I made the real one!<br>
-This script runs as a service and allows you to play music from YouTube and control playback using Telegram. It uses an awesome [MPV](https://github.com/mpv-player/mpv) media player as a backend.
+If you've ever used Discord, you've probably heard of music bots that play music for you. All you had to do was just type "**-p \<track_name\>**" to listen to your favorite song. I also liked it, so I made the **real** one!<br>
+This script works as a service and allows you to play music on speakers from YouTube and control playback using Telegram. It uses an awesome [MPV](https://github.com/mpv-player/mpv) media player as a backend.
+
+**To be clear**, this is not a regular music bot. It plays music directly on the connected speakers, not in voice chat or audio messages.
 
 ## Features
 
