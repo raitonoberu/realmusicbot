@@ -8,6 +8,7 @@ from youtubesearchpython import VideosSearch, StreamURLFetcher, Video, Playlist
 
 fetcher = StreamURLFetcher()
 
+
 def _get_playlist(url):
     playlist = Playlist.getVideos(url)
     for video in playlist["videos"]:
@@ -34,8 +35,8 @@ def get(name_or_url):
             return
         url = result[0]["link"]
         print(url)
-    fetcher = StreamURLFetcher()
     video = Video.get(url)
+    global fetcher
     stream = fetcher.get(video, itag)
     duration = convert_duration(
         int(float(video["streamingData"]["formats"][0]["approxDurationMs"]) // 1000)
