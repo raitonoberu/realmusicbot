@@ -38,7 +38,7 @@ if settings.genius_token:
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] (%(funcName)s) %(message)s",
+    format="[%(levelname)s] (%(funcName)s) %(message)s",
     handlers=[logging.StreamHandler()],
 )
 
