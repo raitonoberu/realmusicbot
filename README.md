@@ -1,4 +1,4 @@
-<h1 align="center">🎶 Real Music Bot 2.0 🎶</h1>
+<h1 align="center">🎶 Real Music Bot 2.1 🎶</h1>
 
 <p align="center">
     Control your speakers with Telegram and play music from YouTube
@@ -79,21 +79,32 @@ List of available commands:
 - **/l** - Search for lyrics
 
 
-## Installation (Raspberry Pi / Linux)
+## Installation
 
 Make sure you have [Python 3.7+ installed](https://www.python.org/downloads/)
 
 ### 1. Install packages
 
+##### Linux
+
     $ sudo apt install mpv
     $ pip3 install https://github.com/raitonoberu/realmusicbot/archive/master.zip
 
+##### Windows
+
+    pip install https://github.com/raitonoberu/realmusicbot/archive/master.zip
 
 ### 2. Change settings
 
 Before running, you must configure your bot by editing the file **~/.config/realmusicbot.ini**:
 
+##### Linux
+
     $ nano ~/.config/realmusicbot.ini
+
+##### Windows
+
+    notepad %USERPROFILE%\.config\realmusicbot.ini
 
 #### 2.1 Set your bot token
 
@@ -136,7 +147,7 @@ There are two ways to run Real Music Bot. It's recommended to run it in a termin
 
 Press **Ctrl+C** to close.
 
-#### 3.2 Running as a service
+#### 3.2 Running as a service (Linux only)
 
     $ systemctl --user start realmusicbot
     $ systemctl --user enable realmusicbot
@@ -147,11 +158,19 @@ Check logs:
 
 ## Uninstallation
 
+##### Linux
+
     $ systemctl --user stop realmusicbot
     $ systemctl --user disable realmusicbot
     $ sudo rm ~/.config/systemd/user/realmusicbot.service
     $ sudo rm -r ~/.config/realmusicbot.ini
     $ pip3 uninstall realmusicbot
+
+##### Windows
+
+    where realmusicbot | python -c "import os;os.remove(os.path.dirname(input())+r'\mpv-1.dll')"
+    del /f "%USERPROFILE%\.config\realmusicbot.ini"
+    pip uninstall realmusicbot
 
 ## Credits
 
@@ -176,7 +195,4 @@ GPLv3, see [LICENSE](./LICENSE) for additional info.
 ## TODO
 
 * Localization
-* "jump", "delete", "seek" commands
-* Better exceptions handling & logging
 * Passing params to MPV
-* Running the bot in Windows

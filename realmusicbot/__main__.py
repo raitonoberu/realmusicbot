@@ -18,13 +18,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import telebot
 from random import choice
 from time import sleep
-import mpv
 import logging
+import os
+import platform
 from . import settings
 from . import commands
 from . import keyboards
 from . import music_provider
 from . import utils
+
+if platform.system() == "Windows":
+    os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
+import mpv
 
 if settings.radio:
     from . import radio_provider
@@ -33,7 +38,7 @@ if settings.genius_token:
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] (%(funcName)s) %(message)s",
+    format="[%(levelname)s] (%(funcName)s) %(message)s",
     handlers=[logging.StreamHandler()],
 )
 
