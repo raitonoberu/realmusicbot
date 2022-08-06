@@ -86,7 +86,6 @@ setup(
     entry_points={"console_scripts": ["realmusicbot = realmusicbot:run"]},
     install_requires=[
         "python-mpv",
-        "lyricsgenius",
         "youtube-search-python",
         "pyradios",
         "pyTelegramBotAPI",

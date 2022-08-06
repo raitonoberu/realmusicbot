@@ -25,16 +25,13 @@ from . import settings
 from . import commands
 from . import keyboards
 from . import music_provider
+from . import radio_provider
+from . import lyrics_provider
 from . import utils
 
 if platform.system() == "Windows":
     os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
 import mpv
-
-if settings.radio:
-    from . import radio_provider
-if settings.genius_token:
-    from . import lyrics_provider
 
 logging.basicConfig(
     level=logging.INFO,
@@ -261,8 +258,6 @@ def queue_msg(message):
 
 @bot.message_handler(commands=commands.radio_prefixes)
 def radio_msg(message):
-    if not settings.radio:
-        return
     inp = message.text
     id = message.chat.id
     symbol = choice(["🚀", "⌛", "🔍", "🔎", "🎲"])
@@ -285,8 +280,6 @@ def radio_msg(message):
 
 @bot.message_handler(commands=commands.lyrics_commands)
 def lyrics_msg(message):
-    if not settings.genius_token:
-        return
     id = message.chat.id
     if queue.len == 0:
         send_msg("Nothing playing! 💤", id)
@@ -302,9 +295,8 @@ def lyrics_msg(message):
         logging.error(e)
         bot.reply_to(message, str(e))
         return
-    if lyrics != {}:
-        answer = f"📄 Lyrics for {lyrics['title']}:\n{lyrics['lyrics']}"
-        send_msg(answer, id, pic=lyrics["art"])
+    if lyrics != "":
+        send_msg(lyrics, id)
     else:
         bot.reply_to(message, "Not found ⚠")
 

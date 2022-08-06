@@ -1,5 +1,4 @@
 python-mpv
-lyricsgenius
 youtube-search-python
 pyradios
 pyTelegramBotAPI

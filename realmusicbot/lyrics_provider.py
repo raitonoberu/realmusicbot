@@ -2,19 +2,11 @@
 RealMusicBot: Control your speakers with Telegram and play music from YouTube
 Copyright (C) 2021  raitonoberu
 """
-import lyricsgenius
-from .settings import genius_token
+import requests
+
+API_URL = "https://lyricsapi.vercel.app/api/lyrics"
 
 
 def get(title):
-    genius = lyricsgenius.Genius(genius_token)
-    genius.verbose = False
-    song = genius.search_song(title, get_full_info=False)
-    if song is None:
-        return {}
-
-    return {
-        "title": f"{song.artist} - {song.title}",
-        "lyrics": song.lyrics,
-        "art": song.song_art_image_url,
-    }
+    lyrics = requests.get(API_URL, params={"name": title}).json()
+    return "\n".join(line["words"] for line in lyrics).replace("♪", "\n")

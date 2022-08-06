@@ -122,14 +122,6 @@ Before running, you must configure your bot by editing the file **~/.config/real
     # - More here: https://gist.github.com/sidneys/7095afe4da4ae58694d128b1034e01e2
     ITAG=251
 
-    # Allows you to search radio (/radio <station>)
-    RADIO=true
-
-    # Allows you to search lyrics (/lyrics)
-    # - Get your Genius Client Access Token here:
-    # - https://genius.com/api-clients
-    GENIUS_TOKEN=
-
     # Bot privatization (HIGHLY RECOMMENDED)
     # - Get your User ID using tg @userinfobot and add it to the list
     # - https://t.me/userinfobot
@@ -171,22 +163,6 @@ Check logs:
     where realmusicbot | python -c "import os;os.remove(os.path.dirname(input())+r'\mpv-1.dll')"
     del /f "%USERPROFILE%\.config\realmusicbot.ini"
     pip uninstall realmusicbot
-
-## Credits
-
-"mpv-player" organization for [mpv](https://github.com/mpv-player/mpv)
-
-FrankWang (eternnoir) for [pyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI)
-
-André P. Santos (andreztz) for [pyradios](https://github.com/andreztz/pyradios)
-
-John W. Miller (johnwmillr) for [LyricsGenius](https://github.com/johnwmillr/LyricsGenius)
-
-"pytube" organization for [pytube](https://github.com/pytube/pytube)
-
-Hitesh Kumar Saini (alexmercerind) for [youtube-search-python](https://github.com/alexmercerind/youtube-search-python)
-
-jaseg for [python-mpv](https://github.com/jaseg/python-mpv)
 
 ## License
 

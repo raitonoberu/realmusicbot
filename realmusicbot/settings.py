@@ -26,8 +26,6 @@ if not token or token == "yourtoken":
 threaded = config.get("SETTINGS", "THREADED")
 itag = config.getint("SETTINGS", "ITAG")
 language = config.get("SETTINGS", "LANGUAGE")
-radio = config.getboolean("SETTINGS", "RADIO")
-genius_token = config.get("SETTINGS", "GENIUS_TOKEN")
 allowed_ids = [
     int(i) for i in config.get("SETTINGS", "ALLOWED_IDS").split(",") if i != ""
 ]
