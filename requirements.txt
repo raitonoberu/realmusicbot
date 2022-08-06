@@ -3,4 +3,3 @@ lyricsgenius
 youtube-search-python
 pyradios
 pyTelegramBotAPI
-pytube

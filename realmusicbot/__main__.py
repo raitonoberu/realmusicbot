@@ -157,7 +157,7 @@ class Announcer(object):
 
 @player.event_callback("end-file")
 def on_end_file(event):
-    if event["event"]["reason"] != 2:  # if not skipped
+    if event.data.reason != 2:  # if not skipped
         queue.skip()
     # TODO: catch errors
 

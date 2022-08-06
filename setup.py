@@ -90,7 +90,6 @@ setup(
         "youtube-search-python",
         "pyradios",
         "pyTelegramBotAPI",
-        "pytube",
     ],
     classifiers=[
         "Development Status :: 4 - Beta",
