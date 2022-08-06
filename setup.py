@@ -7,7 +7,6 @@ from setuptools import setup, find_packages
 import subprocess
 import os
 import struct
-import urllib.request
 import sys
 import platform
 import tempfile
@@ -34,25 +33,29 @@ def prepare_windows():
     # 64bit or 32bit Python
     bit = 8 * struct.calcsize("P")
     if bit == 64:
-        mpv_url = "https://pilotfiber.dl.sourceforge.net/project/mpv-player-windows/libmpv/mpv-dev-x86_64-20210316-git-5824d9f.7z"
+        mpv_url = "https://downloads.sourceforge.net/project/mpv-player-windows/libmpv/mpv-dev-x86_64-20220731-git-284fecc.7z"
     if bit == 32:
-        mpv_url = "https://versaweb.dl.sourceforge.net/project/mpv-player-windows/libmpv/mpv-dev-i686-20210316-git-5824d9f.7z"
+        mpv_url = "https://downloads.sourceforge.net/project/mpv-player-windows/libmpv/mpv-dev-i686-20220731-git-284fecc.7z"
 
-    # install 7zip unpacker
+    # install 7zip unpacker 
     subprocess.check_output(
-        [sys.executable, "-m", "pip", "install", "pyunpack", "patool"]
+        [sys.executable, "-m", "pip", "install", "pyunpack", "patool", "requests"]
     )
     from pyunpack import Archive
+    import requests
 
     with tempfile.TemporaryDirectory() as tdir:
         mpv_path = os.path.join(tdir, "mpv.7z")
-        urllib.request.urlretrieve(mpv_url, mpv_path)
+
+        with open(mpv_path, "wb") as f:
+            f.write(requests.get(mpv_url).content)
+
         Archive(mpv_path).extractall(tdir)
-        lib_path = os.path.join(tdir, "mpv-1.dll")
+        lib_path = os.path.join(tdir, "mpv-2.dll")
         new_path = os.path.dirname(
             subprocess.check_output(["where", "realmusicbot"]).decode().strip()
         )
-        shutil.copy2(lib_path, os.path.join(new_path, "mpv-1.dll"))
+        shutil.copy2(lib_path, os.path.join(new_path, "mpv-2.dll"))
 
 
 class InstallService(install):
