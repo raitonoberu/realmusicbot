@@ -1,7 +1,7 @@
 <h1 align="center">🎶 Real Music Bot 2.1 🎶</h1>
 
 <p align="center">
-    Control your speakers with Telegram and play music from YouTube
+    Control your speakers with Telegram and play music from YouTube Music
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 ## What is it?
 
 If you've ever used Discord, you've probably heard of music bots that play music for you. All you had to do was just type "**-p \<track_name\>**" to listen to your favorite song. I also liked it, so I made the **real** one!<br>
-This script works as a service and allows you to play music on speakers from YouTube and control playback using Telegram. It uses an awesome [MPV](https://github.com/mpv-player/mpv) media player as a backend.
+This script works as a service and allows you to play music on speakers from YouTube Music and control playback using Telegram. It uses an awesome [MPV](https://github.com/mpv-player/mpv) media player as a backend.
 
 **To be clear**, this is not a regular music bot. It plays music directly on the connected speakers, not in voice chat or audio messages.
 
@@ -160,7 +160,7 @@ Check logs:
 
 ##### Windows
 
-    where realmusicbot | python -c "import os;os.remove(os.path.dirname(input())+r'\mpv-1.dll')"
+    where realmusicbot | python -c "import os;os.remove(os.path.dirname(input())+r'\mpv-2.dll')"
     del /f "%USERPROFILE%\.config\realmusicbot.ini"
     pip uninstall realmusicbot
 
