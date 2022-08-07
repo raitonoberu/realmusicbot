@@ -267,7 +267,7 @@ def radio_msg(message):
     try:
         stantion = radio_provider.get(radio_title)
     except Exception as e:
-        logging.error(e)
+        logging.exception(e)
         bot.reply_to(message, str(e))
         return
     if stantion != ():
@@ -292,7 +292,7 @@ def lyrics_msg(message):
     try:
         lyrics = lyrics_provider.get(queue.now.title.split("(")[0].split("[")[0])
     except Exception as e:
-        logging.error(e)
+        logging.exception(e)
         bot.reply_to(message, str(e))
         return
     if lyrics != "":
@@ -321,7 +321,7 @@ def play_msg(message):
             track.chat_id = id
             queue.add(track)
     except Exception as e:
-        logging.error(e)
+        logging.exception(e)
         bot.reply_to(message, str(e))
         return
 
