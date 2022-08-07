@@ -1,4 +1,4 @@
 python-mpv
-youtube-search-python
 pyradios
 pyTelegramBotAPI
+ytmusicapi

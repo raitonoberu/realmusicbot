@@ -4,41 +4,83 @@ Copyright (C) 2021  raitonoberu
 """
 from .settings import itag
 from .utils import convert_duration
-from youtubesearchpython import VideosSearch, StreamURLFetcher, Video, Playlist
+from ytmusicapi import YTMusic
+import requests
+import re
 
-fetcher = StreamURLFetcher()
+ytmusic = YTMusic()
 
-
-def _get_playlist(url):
-    playlist = Playlist.getVideos(url)
-    for video in playlist["videos"]:
-        url = video["link"]
-        try:
-            duration = video["duration"]
-            video = Video.get(url)
-            stream = fetcher.get(video, itag)
-            yield (video["title"], duration, stream, url)
-        except Exception as e:
-            print(e)
+videoId_regex = re.compile(r"((?<=(v|V)/)|(?<=be/)|(?<=(\?|\&)v=)|(?<=embed/))([\w-]+)")
+playlistId_regex = re.compile(r"(?<=list=)([\w-]+)")
 
 
 def get(name_or_url):
     if "youtu" in name_or_url:  # detect youtube link
-        url = name_or_url
-        if "playlist" in url:
-            yield from _get_playlist(url)
+        if "playlist" in name_or_url:
+            # TODO: decide what to do with playlists
+            yield from _get_playlist(name_or_url)
             return
+        regex = videoId_regex.findall(name_or_url)
+        if len(regex) == 0 or len(regex[0]) < 4:
+            yield ()
+            return
+        videoId = regex[0][3]
     else:
-        result = VideosSearch(name_or_url, limit=1).result()["result"]
+        result = ytmusic.search(name_or_url, filter="songs", limit=1)
         if not result:
             yield ()
             return
-        url = result[0]["link"]
-        print(url)
-    video = Video.get(url)
-    global fetcher
-    stream = fetcher.get(video, itag)
-    duration = convert_duration(
-        int(float(video["streamingData"]["formats"][0]["approxDurationMs"]) // 1000)
-    )
-    yield (video["title"], duration, stream, url)
+        videoId = result[0]["videoId"]
+    yield _get_video(videoId, itag)
+
+
+def _get_playlist(url):
+    regex = playlistId_regex.findall(url)
+    if len(regex) == 0:
+        yield ()
+        return
+    playlistId = regex[0]
+
+    playlist = ytmusic.get_playlist(playlistId)
+    for track in playlist["tracks"]:
+        videoId = track["videoId"]
+        try:
+            yield _get_video(videoId, itag)
+        except Exception as e:
+            print(e)
+
+
+def _get_video(video_id, itag):
+    player = requests.post(
+        "https://www.youtube.com/youtubei/v1/player",
+        json={
+            "context": {
+                "client": {
+                    "clientName": "ANDROID",
+                    "clientScreen": "EMBED",
+                    "clientVersion": "16.43.34",
+                },
+                "thirdParty": {
+                    "embedUrl": "https://www.youtube.com",
+                },
+            },
+            "videoId": video_id,
+        },
+        headers={"X-Goog-Api-Key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"},
+    ).json()
+
+    author = player["videoDetails"]["author"]
+    if " - Topic" in author:
+        title = author.replace(" - Topic", "") + " - " + player["videoDetails"]["title"]
+    else:
+        title = player["videoDetails"]["title"]
+    duration = convert_duration(player["videoDetails"]["lengthSeconds"])
+    stream = ""
+    formats = player["streamingData"]["adaptiveFormats"]
+    for f in formats:
+        if f["itag"] == itag:
+            stream = f["url"]
+            break
+    url = f"https://www.youtube.com/watch?v={video_id}"
+
+    return title, duration, stream, url

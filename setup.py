@@ -86,9 +86,9 @@ setup(
     entry_points={"console_scripts": ["realmusicbot = realmusicbot:run"]},
     install_requires=[
         "python-mpv",
-        "youtube-search-python",
         "pyradios",
         "pyTelegramBotAPI",
+        "ytmusicapi",
     ],
     classifiers=[
         "Development Status :: 4 - Beta",
