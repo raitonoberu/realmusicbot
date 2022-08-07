@@ -9,4 +9,4 @@ API_URL = "https://lyricsapi.vercel.app/api/lyrics"
 
 def get(title):
     lyrics = requests.get(API_URL, params={"name": title}).json()
-    return "\n".join(line["words"] for line in lyrics).replace("♪", "\n")
+    return "\n".join(line["words"] for line in lyrics).replace("♪", "")
