@@ -89,6 +89,7 @@ setup(
         "pyradios",
         "pyTelegramBotAPI",
         "ytmusicapi",
+        "yt-dlp",
     ],
     classifiers=[
         "Development Status :: 4 - Beta",
