@@ -5,7 +5,7 @@ Copyright (C) 2021  raitonoberu
 from .settings import itag
 from .utils import convert_duration
 from ytmusicapi import YTMusic
-import requests
+from yt_dlp import YoutubeDL
 import re
 
 ytmusic = YTMusic()
@@ -24,14 +24,16 @@ def get(name_or_url):
         if len(regex) == 0 or len(regex[0]) < 4:
             yield ()
             return
-        videoId = regex[0][3]
+        yield _get_video(regex[0][3], itag)
     else:
         result = ytmusic.search(name_or_url, filter="songs", limit=1)
         if not result:
             yield ()
             return
-        videoId = result[0]["videoId"]
-    yield _get_video(videoId, itag)
+        yield (
+            _get_title(result[0]),
+            *_get_video(result[0].get("videoId", ""), itag)[1:],
+        )
 
 
 def _get_playlist(url):
@@ -42,45 +44,43 @@ def _get_playlist(url):
     playlistId = regex[0]
 
     playlist = ytmusic.get_playlist(playlistId)
-    for track in playlist["tracks"]:
-        videoId = track["videoId"]
+    for track in playlist.get("tracks", []):
         try:
-            yield _get_video(videoId, itag)
+            yield (
+                _get_title(track),
+                *_get_video(track.get("videoId", ""), itag)[1:],
+            )
         except Exception as e:
             print(e)
 
 
 def _get_video(video_id, itag):
-    player = requests.post(
-        "https://www.youtube.com/youtubei/v1/player",
-        json={
-            "context": {
-                "client": {
-                    "clientName": "ANDROID",
-                    "clientScreen": "EMBED",
-                    "clientVersion": "16.43.34",
-                },
-                "thirdParty": {
-                    "embedUrl": "https://www.youtube.com",
-                },
-            },
-            "videoId": video_id,
-        },
-        headers={"X-Goog-Api-Key": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"},
-    ).json()
-
-    author = player["videoDetails"]["author"]
-    if " - Topic" in author:
-        title = author.replace(" - Topic", "") + " - " + player["videoDetails"]["title"]
-    else:
-        title = player["videoDetails"]["title"]
-    duration = convert_duration(player["videoDetails"]["lengthSeconds"])
-    stream = ""
-    formats = player["streamingData"]["adaptiveFormats"]
-    for f in formats:
-        if f["itag"] == itag:
-            stream = f["url"]
-            break
     url = f"https://www.youtube.com/watch?v={video_id}"
+    info = {}
+    with YoutubeDL(params={"quiet": True, "format": str(itag)}) as ydl:
+        info = ydl.extract_info(url, download=False)
+
+    author = info.get("uploader", "")
+    if " - Topic" in author:
+        title = author.replace(" - Topic", "") + " - " + info.get("title", "")
+    else:
+        title = info.get("title", "")
+
+    duration = convert_duration(info.get("duration", 0))
+    stream = info.get("url", "")
 
     return title, duration, stream, url
+
+
+def _get_title(track):
+    artist = ""
+    for i, a in enumerate(track.get("artists", [])):
+        if i != 0:
+            artist += ", "
+        artist += a.get("name", "")
+
+    title = track.get("title", "")
+
+    if artist != "":
+        return artist + " - " + title
+    return title

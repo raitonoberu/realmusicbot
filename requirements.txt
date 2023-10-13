@@ -2,3 +2,4 @@ python-mpv
 pyradios
 pyTelegramBotAPI
 ytmusicapi
+yt_dlp
